@@ -1,0 +1,24 @@
+{
+  "name": "新車・中古車 コスト比較",
+  "short_name": "車コスト比較",
+  "description": "購入金額と維持費の年間コストで新車と中古車を比較するシミュレーター",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#F9FAFB",
+  "theme_color": "#2563EB",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
