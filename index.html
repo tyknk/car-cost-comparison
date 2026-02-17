@@ -57,7 +57,6 @@ body {
 .header {
   display: flex;
   align-items: baseline;
-  justify-content: center;
   gap: 12px;
   margin-bottom: 2rem;
   padding-bottom: 12px;
@@ -108,19 +107,17 @@ body {
 
 /* ===== 印刷ボタン ===== */
 .print-btn {
-  position: fixed;
-  top: 1rem;
-  right: 1rem;
   font-family: inherit;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-radius: 6px;
   padding: 6px 16px;
-  font-size: 0.75rem;
+  font-size: 0.8rem;
   cursor: pointer;
   color: var(--text-secondary);
-  z-index: 100;
   transition: all 0.15s;
+  margin-left: auto;
+  white-space: nowrap;
 }
 .print-btn:hover {
   background: var(--bg-warm);
@@ -802,13 +799,12 @@ body {
 </head>
 <body>
 
-<button class="print-btn" onclick="window.print()">🖨 印刷</button>
-
 <div id="app">
   <!-- ヘッダー -->
   <div class="header">
     <h1>新車・中古車 コスト比較</h1>
     <p>購入金額＋維持費の年間コストで比較します</p>
+    <button class="print-btn" onclick="window.print()">印刷</button>
   </div>
 
   <!-- 全体説明 -->
