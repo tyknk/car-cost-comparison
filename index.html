@@ -3,27 +3,34 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#2563EB">
+<meta name="theme-color" content="#1a6b8a">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="車コスト比較">
 <link rel="manifest" href="manifest.json">
 <link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
 <title>新車・中古車 コスト比較シミュレーター</title>
 <style>
 :root {
-  --new-car-color: #2563EB;
-  --new-car-light: #DBEAFE;
-  --used-car-color: #EA580C;
-  --used-car-light: #FFF7ED;
-  --result-positive: #16A34A;
-  --result-positive-light: #DCFCE7;
-  --bg-main: #F9FAFB;
-  --bg-card: #FFFFFF;
-  --text-primary: #111827;
-  --text-secondary: #6B7280;
-  --border-color: #E5E7EB;
+  --new-car-color: #1a6b8a;
+  --new-car-dark: #0e4f6a;
+  --new-car-light: #ddeef6;
+  --used-car-color: #b35c1e;
+  --used-car-dark: #8a4510;
+  --used-car-light: #f8e8d6;
+  --result-positive: #1a7a4a;
+  --result-positive-light: #d6f0e2;
+  --warn-color: #b83a2a;
+  --bg-main: #f5f3ee;
+  --bg-warm: #ece8df;
+  --bg-card: #ffffff;
+  --text-primary: #1a1a1a;
+  --text-secondary: #6e6e6e;
+  --border-color: #d0cabe;
+  --border-light: #e4dfd5;
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
 }
 
 *, *::before, *::after {
@@ -33,47 +40,57 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  font-family: 'Zen Kaku Gothic New', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Hiragino Sans', sans-serif;
   background: var(--bg-main);
   color: var(--text-primary);
-  line-height: 1.6;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
 }
 
 #app {
-  max-width: 1100px;
+  max-width: 980px;
   margin: 0 auto;
-  padding: 1.5rem 1rem;
+  padding: 40px 24px 80px;
 }
 
 /* ===== ヘッダー ===== */
 .header {
-  text-align: center;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 12px;
   margin-bottom: 2rem;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--text-primary);
 }
 .header h1 {
-  font-size: 1.75rem;
+  font-size: 1.4rem;
   font-weight: 700;
+  letter-spacing: 0.04em;
   color: var(--text-primary);
 }
 .header p {
-  font-size: 1rem;
+  font-size: 0.8rem;
   color: var(--text-secondary);
-  margin-top: 0.25rem;
+  font-weight: 400;
 }
 
 /* ===== 説明文 ===== */
 .guide-box {
-  background: #F0F9FF;
-  border: 1px solid #BAE6FD;
-  border-radius: 10px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-left: 4px solid var(--new-car-color);
+  border-radius: var(--radius, 6px);
   padding: 1rem 1.25rem;
   margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-  line-height: 1.7;
-  color: #1E3A5F;
+  font-size: 0.85rem;
+  line-height: 1.8;
+  color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
 }
 .guide-box strong {
   color: var(--text-primary);
+  font-weight: 600;
 }
 .section-note {
   font-size: 0.8rem;
@@ -94,18 +111,20 @@ body {
   position: fixed;
   top: 1rem;
   right: 1rem;
+  font-family: inherit;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 8px;
-  padding: 0.5rem 1rem;
-  font-size: 0.875rem;
+  border-radius: 6px;
+  padding: 6px 16px;
+  font-size: 0.75rem;
   cursor: pointer;
   color: var(--text-secondary);
   z-index: 100;
-  transition: background 0.2s;
+  transition: all 0.15s;
 }
 .print-btn:hover {
-  background: var(--bg-main);
+  background: var(--bg-warm);
+  border-color: var(--text-secondary);
 }
 
 /* ===== 印刷用条件サマリー（画面では非表示） ===== */
@@ -123,14 +142,15 @@ body {
 .input-column {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
 }
 .input-column.new-car {
-  border-top: 3px solid var(--new-car-color);
+  border-left: 4px solid var(--new-car-color);
 }
 .input-column.used-car {
-  border-top: 3px solid var(--used-car-color);
+  border-left: 4px solid var(--used-car-color);
 }
 .input-column h3 {
   font-size: 1.1rem;
@@ -184,6 +204,7 @@ body {
   padding: 0.4rem 0.5rem;
   border: 1px solid var(--border-color);
   border-radius: 6px;
+  font-family: inherit;
   font-size: 1rem;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -200,7 +221,7 @@ body {
   margin-top: 0.75rem;
   padding: 0.75rem;
   background: var(--used-car-light);
-  border-radius: 8px;
+  border-radius: 6px;
 }
 .auto-info-item {
   font-size: 0.875rem;
@@ -211,16 +232,18 @@ body {
   color: var(--text-primary);
 }
 .auto-info-item.warning span {
-  color: #DC2626;
+  color: var(--warn-color);
   font-weight: 700;
 }
 
 .ownership-section {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-left: 4px solid var(--result-positive);
+  border-radius: 6px;
   padding: 1.25rem;
   margin-bottom: 1.5rem;
+  box-shadow: var(--shadow-sm);
 }
 .ownership-section h3 {
   font-size: 1.1rem;
@@ -242,9 +265,10 @@ body {
 .kpi-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 1.25rem;
   text-align: center;
+  box-shadow: var(--shadow-sm);
 }
 .kpi-card .kpi-label {
   font-size: 0.875rem;
@@ -263,15 +287,15 @@ body {
   color: var(--text-secondary);
 }
 .kpi-card.new-car {
-  border-top: 3px solid var(--new-car-color);
+  border-left: 4px solid var(--new-car-color);
 }
 .kpi-card.new-car .kpi-value { color: var(--new-car-color); }
 .kpi-card.used-car {
-  border-top: 3px solid var(--used-car-color);
+  border-left: 4px solid var(--used-car-color);
 }
 .kpi-card.used-car .kpi-value { color: var(--used-car-color); }
 .kpi-card.difference {
-  border-top: 3px solid var(--result-positive);
+  border-left: 4px solid var(--result-positive);
   background: var(--result-positive-light);
 }
 .kpi-card.difference .kpi-value {
@@ -292,11 +316,12 @@ body {
 .kpi-summary {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 1rem;
   text-align: center;
   font-size: 1rem;
   color: var(--text-secondary);
+  box-shadow: var(--shadow-sm);
 }
 .kpi-summary .summary-total {
   font-weight: 600;
@@ -306,16 +331,14 @@ body {
 
 /* ===== グラフエリア ===== */
 .charts-section {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
   margin-bottom: 1.5rem;
 }
 .chart-card {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
 }
 .chart-card h3 {
   font-size: 1rem;
@@ -342,10 +365,11 @@ body {
   width: 100%;
   border-collapse: collapse;
   background: var(--bg-card);
-  border-radius: 12px;
+  border-radius: 6px;
   overflow: hidden;
   border: 1px solid var(--border-color);
   font-variant-numeric: tabular-nums;
+  box-shadow: var(--shadow-sm);
 }
 .cost-table th, .cost-table td {
   padding: 0.6rem 1rem;
@@ -354,7 +378,7 @@ body {
   font-size: 1rem;
 }
 .cost-table th {
-  background: var(--bg-main);
+  background: var(--bg-warm);
   font-weight: 600;
   font-size: 0.875rem;
   color: var(--text-secondary);
@@ -375,7 +399,7 @@ body {
 .cost-table tr.annual-row td {
   font-weight: 700;
   font-size: 1.1rem;
-  background: #FFFBEB;
+  background: var(--bg-warm);
 }
 .cost-table tr.annual-row td.highlight-new {
   background: var(--new-car-light);
@@ -396,8 +420,9 @@ body {
   width: 100%;
   background: var(--bg-card);
   border: 1px solid var(--border-color);
-  border-radius: 12px;
+  border-radius: 6px;
   padding: 0.85rem 1.25rem;
+  font-family: inherit;
   font-size: 1rem;
   font-weight: 500;
   color: var(--text-secondary);
@@ -406,9 +431,10 @@ body {
   align-items: center;
   justify-content: space-between;
   transition: background 0.2s;
+  box-shadow: var(--shadow-sm);
 }
 .settings-toggle:hover {
-  background: var(--bg-main);
+  background: var(--bg-warm);
 }
 .settings-toggle .arrow {
   transition: transform 0.3s;
@@ -422,14 +448,14 @@ body {
   background: var(--bg-card);
   border: 1px solid var(--border-color);
   border-top: none;
-  border-radius: 0 0 12px 12px;
+  border-radius: 0 0 6px 6px;
   padding: 1.25rem;
 }
 .settings-content.open {
   display: block;
 }
 .settings-toggle.open {
-  border-radius: 12px 12px 0 0;
+  border-radius: 6px 6px 0 0;
 }
 
 /* ----- 維持費テーブル形式 ----- */
@@ -522,19 +548,21 @@ body {
   text-align: center;
   color: var(--text-secondary);
   font-size: 0.8rem;
-  padding: 1rem 0;
-  border-top: 1px solid var(--border-color);
+  padding: 1.5rem 0 1rem;
+  margin-top: 1rem;
+  border-top: 2px solid var(--text-primary);
   line-height: 1.8;
 }
 
 /* ===== 警告メッセージ ===== */
 .warning-message {
   display: none;
-  background: #FEF2F2;
-  border: 1px solid #FECACA;
-  border-radius: 8px;
+  background: #fdf0ef;
+  border: 1px solid #e8c8c4;
+  border-left: 4px solid var(--warn-color);
+  border-radius: 6px;
   padding: 0.75rem 1rem;
-  color: #DC2626;
+  color: var(--warn-color);
   font-size: 0.9rem;
   font-weight: 500;
   margin-bottom: 1rem;
@@ -593,8 +621,9 @@ body {
     margin-bottom: 0.5em;
     font-size: 0.85em;
     line-height: 1.5;
-    border-color: #BAE6FD;
-    background: #F0F9FF;
+    border-color: var(--border-color);
+    border-left-color: var(--new-car-color);
+    background: var(--bg-card);
   }
   .section-note {
     font-size: 0.7em;
@@ -613,9 +642,9 @@ body {
     flex-wrap: wrap;
     padding: 0.4em 0;
     margin-bottom: 0.5em;
-    border: 1px solid #ccc;
+    border: 1px solid var(--border-color);
     border-radius: 4px;
-    background: #F9FAFB;
+    background: var(--bg-card);
     font-size: 1.05em;
     color: var(--text-primary);
   }
@@ -761,7 +790,7 @@ body {
     padding: 0.3em 0 0;
     margin-top: 0.3em;
     line-height: 1.5;
-    border-top: 1px solid #ccc;
+    border-top: 1px solid var(--border-color);
   }
 
   /* 改ページ防止 */
@@ -784,9 +813,9 @@ body {
 
   <!-- 全体説明 -->
   <div class="guide-box">
-    中古車の「○年落ち」とは、<strong>すでに乗れる年数がその分だけ失われている</strong>ということです。
-    結果的に新車から13年乗れた車とすると、新車は13年間フルに使えますが、5年落ちの中古車は残り8年しか乗れません。
-    <strong>購入金額が安くても、乗れる年数が短ければ、その年数は差し引いてコスト計算する</strong>のが合理性があります。
+    中古車の「○年落ち」は、<strong>車に乗れる年数がすでにその分だけ失われている</strong>とほぼ同義となります。<br>
+    結果的に新車から13年乗れた車とすると、新車は13年間乗れますが、5年落ちの中古車は残り8年で新車経過年数13年を迎えます。<br><br>
+    <strong>購入金額は中古車が安いですが、乗れる年数も短くなるため、その年数は差し引いてコストを計算する</strong>のが合理性があります。<br>
     このシミュレーションでは、購入金額と維持費の合計を所有年数で割った<strong>「年間コスト」</strong>で新車と中古車を比較します。
   </div>
 
@@ -867,7 +896,7 @@ body {
       <div class="kpi-card difference" id="kpiDiffCard">
         <div class="kpi-label">年間差額</div>
         <div class="kpi-value" id="kpiDiffValue">66,333<span class="kpi-unit">円/年</span></div>
-        <div class="kpi-verdict" id="kpiVerdict">新車がお得</div>
+        <div class="kpi-verdict" id="kpiVerdict">新車が年間コストが安い</div>
       </div>
       <div class="kpi-card used-car">
         <div class="kpi-label">中古車 年間コスト</div>
@@ -907,13 +936,8 @@ body {
     <!-- グラフ -->
     <div class="charts-section">
       <div class="chart-card">
-        <h3>維持費内訳（総額）</h3>
-        <p class="section-note" style="text-align:center;">購入金額と維持費の内訳を積み上げて比較します</p>
-        <canvas id="stackedChart"></canvas>
-      </div>
-      <div class="chart-card">
-        <h3>年間コスト比較</h3>
-        <p class="section-note" style="text-align:center;">1年あたりに換算したコストの比較です</p>
+        <h3>年間コスト比較（内訳付き）</h3>
+        <p class="section-note" style="text-align:center;">1年あたりに換算した各費用項目を積み上げて比較します</p>
         <canvas id="annualChart"></canvas>
       </div>
     </div>
@@ -1044,13 +1068,13 @@ body {
 <script>
 // ===== グラフ配色 =====
 const chartColors = {
-  purchase:    '#374151',
-  maintenance: '#2563EB',
-  legal:       '#7C3AED',
-  tire:        '#059669',
-  battery:     '#D97706',
-  repair:      '#DC2626',
-  tax:         '#6B7280',
+  purchase:    '#c8bfb0',
+  maintenance: '#5ba3bf',
+  legal:       '#9b8ec4',
+  tire:        '#5db88a',
+  battery:     '#e2b84a',
+  repair:      '#d47b4a',
+  tax:         '#c08da0',
 };
 
 // ===== ユーティリティ =====
@@ -1158,7 +1182,7 @@ function updateKPI(r) {
     document.getElementById('kpiUsedAnnual').innerHTML = '-<span class="kpi-unit">円/年</span>';
     document.getElementById('kpiDiffValue').innerHTML = '-<span class="kpi-unit">円/年</span>';
     document.getElementById('kpiVerdict').textContent = '-';
-    document.getElementById('kpiDiffCard').style.borderTopColor = 'var(--border-color)';
+    document.getElementById('kpiDiffCard').style.borderLeftColor = 'var(--border-color)';
     document.getElementById('kpiDiffCard').style.background = 'var(--bg-card)';
   } else {
     document.getElementById('kpiUsedAnnual').innerHTML =
@@ -1173,19 +1197,19 @@ function updateKPI(r) {
 
     if (r.annualDifference === 0) {
       document.getElementById('kpiVerdict').textContent = '同額';
-      diffCard.style.borderTopColor = 'var(--result-positive)';
+      diffCard.style.borderLeftColor = 'var(--result-positive)';
       diffCard.style.background = 'var(--result-positive-light)';
       document.getElementById('kpiDiffValue').style.color = 'var(--result-positive)';
       document.getElementById('kpiVerdict').style.color = 'var(--result-positive)';
     } else if (newCheaper) {
-      document.getElementById('kpiVerdict').textContent = '新車がお得';
-      diffCard.style.borderTopColor = 'var(--new-car-color)';
+      document.getElementById('kpiVerdict').textContent = '新車が年間コストが安い';
+      diffCard.style.borderLeftColor = 'var(--new-car-color)';
       diffCard.style.background = 'var(--new-car-light)';
       document.getElementById('kpiDiffValue').style.color = 'var(--new-car-color)';
       document.getElementById('kpiVerdict').style.color = 'var(--new-car-color)';
     } else {
-      document.getElementById('kpiVerdict').textContent = '中古車がお得';
-      diffCard.style.borderTopColor = 'var(--used-car-color)';
+      document.getElementById('kpiVerdict').textContent = '中古車が年間コストが安い';
+      diffCard.style.borderLeftColor = 'var(--used-car-color)';
       diffCard.style.background = 'var(--used-car-light)';
       document.getElementById('kpiDiffValue').style.color = 'var(--used-car-color)';
       document.getElementById('kpiVerdict').style.color = 'var(--used-car-color)';
@@ -1289,100 +1313,85 @@ function updateTable(r) {
 }
 
 // ===== Chart.js =====
-let stackedChart = null;
 let annualChart = null;
 
 function initCharts() {
-  const stackedCtx = document.getElementById('stackedChart').getContext('2d');
-  stackedChart = new Chart(stackedCtx, {
+  const ctx = document.getElementById('annualChart').getContext('2d');
+  annualChart = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: ['新車', '中古車'],
       datasets: [
-        { label: '購入金額',     data: [0, 0], backgroundColor: chartColors.purchase },
-        { label: '定期整備代',   data: [0, 0], backgroundColor: chartColors.maintenance },
-        { label: '法定費用',     data: [0, 0], backgroundColor: chartColors.legal },
-        { label: 'タイヤ交換',   data: [0, 0], backgroundColor: chartColors.tire },
+        { label: '購入金額',       data: [0, 0], backgroundColor: chartColors.purchase },
+        { label: '定期整備代',     data: [0, 0], backgroundColor: chartColors.maintenance },
+        { label: '法定費用',       data: [0, 0], backgroundColor: chartColors.legal },
+        { label: 'タイヤ交換',     data: [0, 0], backgroundColor: chartColors.tire },
         { label: 'バッテリー交換', data: [0, 0], backgroundColor: chartColors.battery },
-        { label: '一般整備',     data: [0, 0], backgroundColor: chartColors.repair },
-        { label: '自動車税',     data: [0, 0], backgroundColor: chartColors.tax },
+        { label: '一般整備',       data: [0, 0], backgroundColor: chartColors.repair },
+        { label: '自動車税',       data: [0, 0], backgroundColor: chartColors.tax },
       ],
     },
     options: {
       responsive: true,
       maintainAspectRatio: true,
       animation: false,
+      layout: { padding: { top: 30, right: 20 } },
       plugins: {
-        legend: { position: 'bottom', labels: { boxWidth: 10, padding: 8, font: { size: 10 } } },
+        legend: { position: 'bottom', labels: { boxWidth: 12, padding: 10, font: { size: 11, family: "'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif" } } },
         tooltip: {
           callbacks: {
             label: function(ctx) {
-              return ctx.dataset.label + ': ' + formatNumber(ctx.raw) + '円';
+              return ctx.dataset.label + ': ' + formatNumber(Math.round(ctx.raw)) + '円/年';
+            },
+            footer: function(items) {
+              var total = 0;
+              items.forEach(function(item) { total += item.raw; });
+              return '合計: ' + formatNumber(Math.round(total)) + '円/年';
             }
           }
         },
       },
       scales: {
-        x: { stacked: true },
+        x: { stacked: true, grid: { display: false } },
         y: {
           stacked: true,
-          ticks: { callback: function(v) { return (v / 10000).toLocaleString() + '万'; } },
-        },
-      },
-    },
-  });
-
-  const annualCtx = document.getElementById('annualChart').getContext('2d');
-  annualChart = new Chart(annualCtx, {
-    type: 'bar',
-    data: {
-      labels: ['新車', '中古車'],
-      datasets: [{
-        label: '年間コスト',
-        data: [0, 0],
-        backgroundColor: ['#2563EB', '#EA580C'],
-        borderRadius: 6,
-        barPercentage: 0.5,
-      }],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: true,
-      animation: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          callbacks: {
-            label: function(ctx) {
-              return formatNumber(ctx.raw) + '円/年';
-            }
-          }
-        },
-      },
-      scales: {
-        y: {
           beginAtZero: true,
           ticks: { callback: function(v) { return (v / 10000).toLocaleString() + '万'; } },
         },
       },
     },
+    plugins: [{
+      id: 'stackedTotalLabel',
+      afterDatasetsDraw: function(chart) {
+        var ctx2 = chart.ctx;
+        var lastMeta = chart.getDatasetMeta(chart.data.datasets.length - 1);
+        ctx2.save();
+        ctx2.font = "bold 14px 'Zen Kaku Gothic New', 'Noto Sans JP', sans-serif";
+        ctx2.textAlign = 'center';
+        lastMeta.data.forEach(function(bar, i) {
+          var total = 0;
+          chart.data.datasets.forEach(function(ds) { total += ds.data[i]; });
+          if (total === 0) return;
+          ctx2.fillStyle = i === 0 ? '#1a6b8a' : '#b35c1e';
+          ctx2.fillText(formatNumber(Math.round(total)) + '円/年', bar.x, bar.y - 10);
+        });
+        ctx2.restore();
+      }
+    }],
   });
 }
 
 function updateChart(r) {
-  stackedChart.data.datasets[0].data = [r.newCarPrice, r.warning ? 0 : r.usedCarPrice];
-  stackedChart.data.datasets[1].data = [r.newMaintenance, r.warning ? 0 : r.usedMaintenance];
-  stackedChart.data.datasets[2].data = [r.newLegalCost, r.warning ? 0 : r.usedLegalCost];
-  stackedChart.data.datasets[3].data = [r.newTireCost, r.warning ? 0 : r.usedTireCost];
-  stackedChart.data.datasets[4].data = [r.newBatteryCost, r.warning ? 0 : r.usedBatteryCost];
-  stackedChart.data.datasets[5].data = [r.newRepairCost, r.warning ? 0 : r.usedRepairCost];
-  stackedChart.data.datasets[6].data = [r.newTaxTotal, r.warning ? 0 : r.usedTaxTotal];
-  stackedChart.update();
-
-  annualChart.data.datasets[0].data = [
-    Math.round(r.newAnnualCost),
-    r.warning ? 0 : Math.round(r.usedAnnualCost)
-  ];
+  var nY = r.newCarOwnership;
+  var uY = r.warning ? 1 : r.usedCarOwnership;
+  var w = r.warning;
+  annualChart.data.datasets[0].data = [r.newCarPrice / nY, w ? 0 : r.usedCarPrice / uY];
+  annualChart.data.datasets[1].data = [r.newMaintenance / nY, w ? 0 : r.usedMaintenance / uY];
+  annualChart.data.datasets[2].data = [r.newLegalCost / nY, w ? 0 : r.usedLegalCost / uY];
+  annualChart.data.datasets[3].data = [r.newTireCost / nY, w ? 0 : r.usedTireCost / uY];
+  annualChart.data.datasets[4].data = [r.newBatteryCost / nY, w ? 0 : r.usedBatteryCost / uY];
+  annualChart.data.datasets[5].data = [r.newRepairCost / nY, w ? 0 : r.usedRepairCost / uY];
+  annualChart.data.datasets[6].data = [r.newTaxTotal / nY, w ? 0 : r.usedTaxTotal / uY];
   annualChart.update();
 }
 
