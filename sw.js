@@ -1,4 +1,4 @@
-const CACHE_NAME = 'car-cost-v1';
+const CACHE_NAME = 'car-cost-v2';
 const ASSETS = [
   './',
   './index.html',
@@ -26,6 +26,12 @@ self.addEventListener('activate', e => {
 
 self.addEventListener('fetch', e => {
   e.respondWith(
-    caches.match(e.request).then(cached => cached || fetch(e.request))
+    fetch(e.request)
+      .then(response => {
+        const clone = response.clone();
+        caches.open(CACHE_NAME).then(cache => cache.put(e.request, clone));
+        return response;
+      })
+      .catch(() => caches.match(e.request))
   );
 });
