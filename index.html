@@ -725,10 +725,15 @@ body {
   /* メインコンテンツ: テーブル左 + グラフ右 */
   .main-content {
     display: grid;
-    grid-template-columns: 3fr 4fr;
+    grid-template-columns: 2fr 5fr;
     grid-template-areas: "table charts";
-    gap: 0.8em;
+    gap: 0.6em;
     align-items: start;
+  }
+  /* 印刷時は説明列を非表示 */
+  .cost-table th:last-child,
+  .cost-table td:last-child {
+    display: none;
   }
   .table-section {
     grid-area: table;
@@ -751,7 +756,7 @@ body {
     border-radius: 4px;
   }
   .cost-table th, .cost-table td {
-    padding: 0.2em 0.4em;
+    padding: 0.15em 0.3em;
     font-size: 0.85em;
   }
   .cost-table th {
