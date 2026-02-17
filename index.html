@@ -725,9 +725,9 @@ body {
   /* メインコンテンツ: テーブル左 + グラフ右 */
   .main-content {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 3fr 4fr;
     grid-template-areas: "table charts";
-    gap: 0.6em;
+    gap: 0.8em;
     align-items: start;
   }
   .table-section {
@@ -751,20 +751,20 @@ body {
     border-radius: 4px;
   }
   .cost-table th, .cost-table td {
-    padding: 0.2em 0.5em;
-    font-size: 0.95em;
-  }
-  .cost-table th {
+    padding: 0.2em 0.4em;
     font-size: 0.85em;
   }
+  .cost-table th {
+    font-size: 0.8em;
+  }
   .cost-table td:last-child {
-    font-size: 0.75em;
+    font-size: 0.7em;
   }
   .cost-table tr.total-row td {
-    font-size: 0.95em;
+    font-size: 0.85em;
   }
   .cost-table tr.annual-row td {
-    font-size: 1em;
+    font-size: 0.9em;
   }
 
   /* グラフ */
