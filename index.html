@@ -676,13 +676,15 @@ body {
   }
   .charts-section { grid-template-columns: 1fr; }
 
-  /* 設定テーブル */
-  .settings-table input[type="range"] { width: 60px; }
-  .settings-table input[type="number"] { width: 70px; font-size: 0.85rem; }
+  /* 設定テーブル: スライダー非表示、数値入力のみ */
+  .settings-table input[type="range"] { display: none; }
+  .settings-table input[type="number"] { width: 80px; font-size: 0.85rem; }
   .settings-table .st-unit { font-size: 0.7rem; }
-  .settings-table tbody td:first-child { font-size: 0.8rem; }
+  .settings-table tbody td:first-child { font-size: 0.75rem; }
+  .settings-table thead th { font-size: 0.75rem; }
+  .settings-table .st-input { gap: 0.2rem; }
   .settings-toggle {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     padding: 0.75rem 1rem;
   }
 
