@@ -642,16 +642,26 @@ body {
     font-size: 0.8rem;
   }
 
-  /* テーブル: 説明列を非表示 */
+  /* テーブル: 説明列を非表示 + 横スクロール対応 */
   .cost-table th:last-child,
   .cost-table td:last-child {
     display: none;
   }
+  .table-section {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
   .cost-table {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
+    min-width: 320px;
   }
   .cost-table th, .cost-table td {
     padding: 0.4rem 0.5rem;
+    white-space: nowrap;
+  }
+  .cost-table td:first-child {
+    white-space: nowrap;
+    font-size: 0.75rem;
   }
   .table-section h3 {
     font-size: 1rem;
