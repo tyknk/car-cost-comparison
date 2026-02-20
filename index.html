@@ -1398,7 +1398,7 @@ function updateTable(r) {
     `${r.newCarOwnership}年分 / ${r.warning ? '-' : r.usedCarOwnership}年分`));
 
   rows.push(`<tr class="total-row">
-    <td>維持費総額</td>
+    <td>総コスト</td>
     <td>${formatNumber(r.newTotalCost)}円</td>
     <td>${r.warning ? '-円' : formatNumber(r.usedTotalCost) + '円'}</td>
     <td></td>
